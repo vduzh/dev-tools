@@ -1,0 +1,14 @@
+services:
+  nexus:
+    image: sonatype/nexus3:latest
+    container_name: nexus
+    ports:
+      - "${NEXUS_PORT:-8081}:8081"
+    volumes:
+      - nexus-data:/nexus-data
+    environment:
+      - NEXUS_JAVA_OPTS=-Djdbc.h2.DB_CLOSE_ON_EXIT=FALSE
+    restart: always
+
+volumes:
+  nexus-data:

@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+
+# Commit Messages
+When generating commit messages, always use the Conventional Commits format:
+<type>(<scope>): <summary>
+
+Allowed types: feat, fix, docs, style, refactor, perf, test, chore.
+Summary must be imperative and short.
