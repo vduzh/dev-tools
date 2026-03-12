@@ -8,6 +8,14 @@ Shared development tools. Not tied to any specific project — serves all reposi
 docker compose up -d
 ```
 
+## Commands
+
+```bash
+docker compose up -d       # start
+docker compose down        # stop (data preserved)
+docker compose down -v     # stop and delete all data
+```
+
 ## Services
 
 | Service | Port | Description |
