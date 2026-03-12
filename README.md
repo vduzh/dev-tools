@@ -22,12 +22,14 @@ docker compose up -d
 
 ### Initial setup
 
-```bash
-# Get initial admin password
-docker exec nexus cat /nexus-data/admin.password
-```
-
-Login as `admin` with the password above, then set a new password through the UI.
+1. Open http://localhost:8081
+2. Click **Sign In** (top right)
+3. Login: `admin`, password:
+   ```bash
+   docker exec nexus cat /nexus-data/admin.password
+   ```
+4. Nexus will prompt you to set a new password (e.g. `admin123` for local dev)
+5. Choose "Enable anonymous access" if you want Gradle/Maven to read without credentials
 
 ### Usage in Gradle/Maven
 
