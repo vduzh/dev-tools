@@ -4,6 +4,7 @@ services:
     container_name: nexus
     ports:
       - "${NEXUS_PORT:-8081}:8081"
+      - "${NEXUS_DOCKER_PORT:-8082}:8082"
     volumes:
       - nexus-data:/nexus-data
     environment:

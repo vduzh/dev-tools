@@ -20,7 +20,8 @@ docker compose down -v     # stop and delete all data
 
 | Service | Port | Description |
 |---------|------|-------------|
-| Nexus | 8081 | Maven/Docker artifact repository |
+| Nexus | 8081 | Web UI, Maven repository |
+| Nexus Docker | 8082 | Docker registry (hosted) |
 
 ## Nexus
 
@@ -62,6 +63,40 @@ publishing {
 }
 ```
 
+### Docker Registry Setup
+
+After initial Nexus setup, create a Docker hosted repository:
+
+1. Open http://localhost:8081 → **Settings** (gear icon) → **Repositories** → **Create repository**
+2. Select **docker (hosted)**
+3. Configure:
+   - **Name:** `docker-hosted`
+   - **HTTP port:** `8082`
+   - **Enable Docker V1 API:** unchecked
+4. Click **Create repository**
+
+#### Docker client configuration
+
+Nexus runs over HTTP locally, so Docker needs to trust it as an insecure registry.
+
+Add to Docker Desktop → **Settings** → **Docker Engine** (`daemon.json`):
+
+```json
+{
+  "insecure-registries": ["localhost:8082"]
+}
+```
+
+Restart Docker Desktop after saving.
+
+#### Usage
+
+```bash
+docker build -t localhost:8082/ms-profile:latest .
+docker login localhost:8082 -u admin -p admin123
+docker push localhost:8082/ms-profile:latest
+```
+
 ### Data
 
 All data is stored in the `nexus-data` Docker volume. Survives container restarts.
@@ -80,3 +115,4 @@ Ports are configurable via `.env`:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NEXUS_PORT` | 8081 | Nexus UI and API |
+| `NEXUS_DOCKER_PORT` | 8082 | Docker registry |
