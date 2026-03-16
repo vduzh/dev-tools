@@ -21,9 +21,11 @@ Shared development tools. Not tied to any specific project — serves all reposi
    docker compose up -d
    ```
 
-## Nexus
+3. Continue with [Nexus Setup](#nexus-setup) below.
 
-### Initial Setup
+## Nexus Setup
+
+### Step 1. First Login
 
 1. Open http://localhost:8081
 2. Click **Sign In** (top right)
@@ -34,7 +36,32 @@ Shared development tools. Not tied to any specific project — serves all reposi
 4. Nexus will prompt you to set a new password (e.g. `admin123` for local dev)
 5. Choose "Enable anonymous access" if you want Gradle/Maven to read without credentials
 
-### Maven Repository
+### Step 2. Create Docker Registry
+
+1. Open http://localhost:8081 → **Settings** (gear icon) → **Repositories** → **Create repository**
+2. Select **docker (hosted)**
+3. Configure:
+   - **Name:** `docker-hosted`
+   - **HTTP port:** `8082`
+   - **Enable Docker V1 API:** unchecked
+4. Click **Create repository**
+
+### Step 3. Configure Docker Client
+
+Nexus runs over HTTP locally, so Docker needs to trust it as an insecure registry.
+
+1. Open Docker Desktop → **Settings** → **Docker Engine**
+2. Add to `daemon.json`:
+   ```json
+   {
+     "insecure-registries": ["localhost:8082"]
+   }
+   ```
+3. Restart Docker Desktop
+
+## Usage
+
+### Maven
 
 ```kotlin
 // build.gradle.kts
@@ -57,35 +84,7 @@ publishing {
 }
 ```
 
-### Docker Registry
-
-#### Setup in Nexus
-
-After initial setup, create a Docker hosted repository:
-
-1. Open http://localhost:8081 → **Settings** (gear icon) → **Repositories** → **Create repository**
-2. Select **docker (hosted)**
-3. Configure:
-   - **Name:** `docker-hosted`
-   - **HTTP port:** `8082`
-   - **Enable Docker V1 API:** unchecked
-4. Click **Create repository**
-
-#### Docker Client Configuration
-
-Nexus runs over HTTP locally, so Docker needs to trust it as an insecure registry.
-
-Add to Docker Desktop → **Settings** → **Docker Engine** (`daemon.json`):
-
-```json
-{
-  "insecure-registries": ["localhost:8082"]
-}
-```
-
-Restart Docker Desktop after saving.
-
-#### Usage
+### Docker
 
 ```bash
 docker build -t localhost:8082/ms-profile:latest .
