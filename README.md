@@ -4,9 +4,14 @@ Shared development tools. Not tied to any specific project — serves all reposi
 
 ## Quick Start
 
-```bash
-docker compose up -d
-```
+1. Copy the example environment file and adjust if needed:
+   ```bash
+   cp .env.example .env
+   ```
+2. Start services:
+   ```bash
+   docker compose up -d
+   ```
 
 ## Commands
 
