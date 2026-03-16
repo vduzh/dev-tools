@@ -8,33 +8,22 @@ Shared development tools. Not tied to any specific project — serves all reposi
    ```bash
    cp .env.example .env
    ```
+
+   Available variables:
+
+   | Variable | Default | Description |
+   |----------|---------|-------------|
+   | `NEXUS_PORT` | 8081 | Nexus UI and API |
+   | `NEXUS_DOCKER_PORT` | 8082 | Docker registry |
+
 2. Start services:
    ```bash
    docker compose up -d
    ```
 
-## Commands
-
-```bash
-docker compose up -d       # start
-docker compose down        # stop (data preserved)
-docker compose down -v     # stop and delete all data
-```
-
-## Services
-
-| Service | Port | Description |
-|---------|------|-------------|
-| Nexus | 8081 | Web UI, Maven repository |
-| Nexus Docker | 8082 | Docker registry (hosted) |
-
 ## Nexus
 
-### Web UI
-
-- http://localhost:8081
-
-### Initial setup
+### Initial Setup
 
 1. Open http://localhost:8081
 2. Click **Sign In** (top right)
@@ -45,7 +34,7 @@ docker compose down -v     # stop and delete all data
 4. Nexus will prompt you to set a new password (e.g. `admin123` for local dev)
 5. Choose "Enable anonymous access" if you want Gradle/Maven to read without credentials
 
-### Usage in Gradle/Maven
+### Maven Repository
 
 ```kotlin
 // build.gradle.kts
@@ -68,9 +57,11 @@ publishing {
 }
 ```
 
-### Docker Registry Setup
+### Docker Registry
 
-After initial Nexus setup, create a Docker hosted repository:
+#### Setup in Nexus
+
+After initial setup, create a Docker hosted repository:
 
 1. Open http://localhost:8081 → **Settings** (gear icon) → **Repositories** → **Create repository**
 2. Select **docker (hosted)**
@@ -80,7 +71,7 @@ After initial Nexus setup, create a Docker hosted repository:
    - **Enable Docker V1 API:** unchecked
 4. Click **Create repository**
 
-#### Docker client configuration
+#### Docker Client Configuration
 
 Nexus runs over HTTP locally, so Docker needs to trust it as an insecure registry.
 
@@ -102,22 +93,10 @@ docker login localhost:8082 -u admin -p admin123
 docker push localhost:8082/ms-profile:latest
 ```
 
-### Data
-
-All data is stored in the `nexus-data` Docker volume. Survives container restarts.
-
-To fully reset:
+## Management
 
 ```bash
-docker compose down -v
-docker compose up -d
+docker compose up -d       # start
+docker compose down        # stop (data preserved in nexus-data volume)
+docker compose down -v     # stop and delete all data
 ```
-
-## Configuration
-
-Ports are configurable via `.env`:
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NEXUS_PORT` | 8081 | Nexus UI and API |
-| `NEXUS_DOCKER_PORT` | 8082 | Docker registry |
