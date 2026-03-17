@@ -84,14 +84,6 @@ publishing {
 }
 ```
 
-### Docker
-
-```bash
-docker build -t localhost:8082/ms-profile:latest .
-docker login localhost:8082 -u admin -p admin123
-docker push localhost:8082/ms-profile:latest
-```
-
 ## Management
 
 ```bash
